@@ -1,0 +1,64 @@
+:root{--navy:#0b2a5b;--blue:#1565d8;--bg:#e9f0fb;--ink:#14213d;--line:#e3e8f0}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+a{color:var(--blue);text-decoration:none}
+/* top bar */
+.top{background:var(--navy);color:#fff;display:flex;justify-content:space-between;align-items:center;padding:12px 24px}
+.brand{font-weight:700;font-size:1.1rem;display:flex;align-items:center;gap:10px}
+.logo{background:#fff;border-radius:50%;width:34px;height:34px;display:grid;place-items:center}
+.who{display:flex;align-items:center;gap:18px;font-size:.92rem}
+.who form{margin:0}
+.link{background:none;border:0;color:#fff;font:inherit;cursor:pointer}
+/* layout */
+.shell{display:flex;min-height:calc(100vh - 60px)}
+aside{width:230px;background:#fff;padding:14px 10px;border-right:1px solid var(--line)}
+aside a{display:flex;gap:10px;align-items:center;padding:11px 14px;margin-bottom:6px;border-radius:6px;color:var(--ink);font-weight:500}
+aside a:hover{background:#f0f5ff}
+aside a.active{background:var(--blue);color:#fff}
+main{flex:1;padding:24px;max-width:1000px}
+/* cards */
+.welcome{background:#dbe7fb;border-radius:8px;padding:18px 22px;margin-bottom:16px}
+.welcome h1{margin:0 0 4px;font-size:1.8rem}
+.welcome p{margin:0}
+.card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:18px 20px;margin-top:18px;box-shadow:0 1px 3px rgba(11,42,91,.06)}
+.card h2{margin:0 0 12px;font-size:1.25rem}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.stat{border-radius:8px;color:#fff;padding:16px;display:flex;flex-direction:column;gap:2px}
+.stat small{opacity:.9}.stat b{font-size:1.8rem}
+.s-blue{background:#1565d8}.s-green{background:#2fb35a}.s-orange{background:#f5a000}.s-purple{background:#6d5bd0}
+/* tables */
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{background:#f4f7fc;text-align:left;font-size:.9rem}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line)}
+/* badges & buttons */
+.badge{padding:3px 10px;border-radius:5px;font-size:.85rem;font-weight:600;display:inline-block}
+.pending{background:#ffd966;color:#5a4400}
+.in-progress{background:#a9d0ff;color:#0b3a7a}
+.resolved{background:#8fd694;color:#14532d}
+.btn{background:var(--blue);color:#fff;border:0;padding:9px 18px;border-radius:5px;font:inherit;font-weight:600;cursor:pointer;display:inline-block}
+.btn:hover{background:#0f52b3}.btn.sm{padding:5px 14px}
+/* forms */
+label{display:block;font-weight:600;font-size:.9rem;margin-top:10px}
+input,select,textarea{width:100%;padding:10px;margin:5px 0 8px;border:1px solid #cfd7e6;border-radius:5px;font:inherit}
+.inline{display:flex;gap:6px;align-items:center}.inline select{margin:0;width:auto}
+.flash{background:#fde8e8;border:1px solid #f5b5b5;color:#8a1c1c;padding:9px 12px;border-radius:5px;margin-bottom:12px}
+.flash.ok{background:#e4f7e9;border-color:#a5dbb3;color:#14532d}
+.meta{display:flex;gap:10px;flex-wrap:wrap;color:#55627a;margin-bottom:12px}
+.reply{border-left:4px solid var(--blue);background:#f4f7fc;padding:10px 14px;margin:10px 0;border-radius:0 6px 6px 0}
+/* login */
+.auth{min-height:100vh;display:flex;align-items:center;justify-content:center;gap:60px;padding:30px;flex-wrap:wrap;
+ /* Put your photo at static/campus.jpg. If it is missing, the gradient below still shows. */
+ background:
+  linear-gradient(to bottom,rgba(233,241,255,.96) 0%,rgba(233,241,255,.7) 45%,rgba(255,255,255,.05) 100%),
+  url("campus.jpg") center bottom/cover no-repeat,
+  linear-gradient(135deg,#cfe0fa,#eef4ff 55%,#cfe3d4)}
+.hero{text-align:center;max-width:360px}
+.hero .big{font-size:4.5rem}
+.hero h1{color:var(--navy);font-size:2.4rem;margin:6px 0}
+.hero p{font-style:italic}
+.auth-card{background:#fff;border-radius:12px;padding:32px;width:380px;box-shadow:0 10px 30px rgba(11,42,91,.15)}
+.auth-card h2{text-align:center;margin-top:0}
+.auth-card .btn{width:100%;padding:12px;margin-top:6px}
+.center{text-align:center;font-size:.9rem}
+@media(max-width:760px){aside{display:none}.stats{grid-template-columns:1fr 1fr}.auth{gap:20px}}
