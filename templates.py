@@ -10,7 +10,7 @@ T = {
 {% set links = [('/dashboard','Dashboard','🏠')] %}
 {% if user.role == 'student' %}{% set links = links + [('/complaints/new','Submit Complaint','✏️'),('/complaints','My Complaints','📋'),('/profile','Profile','👤')] %}
 {% elif user.role == 'staff' %}{% set links = links + [('/complaints','Assigned Complaints','📋'),('/profile','Profile','👤')] %}
-{% else %}{% set links = links + [('/complaints','All Complaints','📋'),('/profile','Profile','👤')] %}{% endif %}
+{% else %}{% set links = links + [('/complaints','All Complaints','📋'),('/users','Manage Users','👥'),('/profile','Profile','👤')] %}{% endif %}
 <header class="top">
   <div class="brand"><span class="logo">🎓</span> Student Complaints Portal</div>
   <div class="who"><span>👤 Hello, {{ user.username|title }} ({{ user.role|title }})</span>
@@ -19,7 +19,7 @@ T = {
 <div class="shell"><aside>
   {% for href, label, icon in links %}<a href="{{ href }}" class="{{ 'active' if request.path == href }}"><span>{{ icon }}</span>{{ label }}</a>{% endfor %}
 </aside><main>
-{% for m in get_flashed_messages() %}<div class="flash">{{ m }}</div>{% endfor %}
+{% for cat, m in get_flashed_messages(with_categories=true) %}<div class="flash {{ 'ok' if cat == 'ok' }}">{{ m }}</div>{% endfor %}
 {% endif %}
 {% block body %}{% endblock %}
 {% if user %}</main></div>{% endif %}</html>""",
@@ -105,6 +105,16 @@ T = {
 <label>Current password</label><input type="password" name="current" autocomplete="current-password" required>
 <label>New password (10+ chars, upper, lower, digit)</label><input type="password" name="new" autocomplete="new-password" required>
 <button class="btn">Update Password</button></form></section>{% endblock %}""",
+
+"users.html": """{% extends 'base.html' %}{% block body %}
+<section class="card"><h2>Create Account</h2><form method="post">""" + CSRF + """
+<label>Username</label><input name="username" required>
+<label>Email</label><input name="email" type="email" required>
+<label>Temporary password (10+ chars, upper, lower, digit)</label><input name="password" type="password" autocomplete="new-password" required>
+<label>Role</label><select name="role">{% for r in roles %}<option value="{{ r }}" {{ 'selected' if r == 'staff' }}>{{ r|title }}</option>{% endfor %}</select>
+<button class="btn">Create Account</button></form></section>
+<section class="card"><h2>All Users</h2><div class="tbl-wrap"><table><tr><th>#</th><th>Username</th><th>Email</th><th>Role</th></tr>
+{% for u in users %}<tr><td>{{ u.id }}</td><td>{{ u.username }}</td><td>{{ u.email }}</td><td>{{ u.role|title }}</td></tr>{% endfor %}</table></div></section>{% endblock %}""",
 
 "error.html": """{% extends 'base.html' %}{% block body %}
 <section class="card"><h2>Error {{ code }}</h2><p>This request could not be completed.</p><a class="btn" href="/dashboard">Back to dashboard</a></section>{% endblock %}""",

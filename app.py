@@ -213,6 +213,32 @@ def profile():
             audit("PASSWORD_CHANGED"); flash("Password updated.")
     return render_template("profile.html")
 
+# ---------- Admin: manage users ----------
+ROLES = ["student", "staff", "admin"]
+
+@app.route("/users", methods=["GET", "POST"])
+@login_required("admin")
+def manage_users():
+    if request.method == "POST":
+        un, em, pw = (request.form.get(k, "").strip() for k in ("username", "email", "password"))
+        role = request.form.get("role", "")
+        if role not in ROLES or not re.fullmatch(r"[A-Za-z0-9_]{3,30}", un) \
+                or not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", em):
+            flash("Invalid username, email or role.")
+        elif not strong_password(pw):
+            flash("Password needs 10+ chars with upper, lower and a digit.")
+        else:
+            try:
+                db().execute("INSERT INTO users(username,email,pw_hash,role) VALUES(?,?,?,?)",
+                             (un, em, generate_password_hash(pw), role)); db().commit()
+                audit("USER_CREATED", username=un, role=role)
+                flash(f"Account created for {un} ({role}).", "ok")
+            except sqlite3.IntegrityError:
+                flash("Username or email already in use.")
+        return redirect(url_for("manage_users"))
+    users = db().execute("SELECT id, username, email, role FROM users ORDER BY id").fetchall()
+    return render_template("users.html", users=users, roles=ROLES)
+
 # ---------- Student: submit / view ----------
 PNG, JPG, PDF = b"\x89PNG\r\n\x1a\n", b"\xff\xd8\xff", b"%PDF-"
 def valid_upload(f):
