@@ -7,6 +7,10 @@ from flask import (Flask, g, request, session, redirect, url_for, abort,
 from jinja2 import DictLoader
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
+from werkzeug.serving import WSGIRequestHandler
+
+# Hide server software and version numbers from the Server header
+WSGIRequestHandler.version_string = lambda self: "Complaints-Portal"
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 DB = os.path.join(BASE, "portal.db")
@@ -110,7 +114,7 @@ app.jinja_env.globals["csrf_token"] = csrf_token
 
 @app.after_request
 def headers(r):
-    r.headers["Content-Security-Policy"] = "default-src 'self'; style-src 'self'; frame-ancestors 'none'"
+    r.headers["Content-Security-Policy"] = "default-src 'self'; style-src 'self'; frame-ancestors 'none'; form-action 'self'; base-uri 'none'; object-src 'none'"
     r.headers["X-Content-Type-Options"] = "nosniff"
     r.headers["X-Frame-Options"] = "DENY"
     r.headers["Referrer-Policy"] = "no-referrer"
