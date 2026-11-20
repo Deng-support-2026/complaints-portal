@@ -1,0 +1,43 @@
+
+ATTACK TEST RESULTS
+==============================================================================
+[PASS] SQL injection at login: ' OR 1=1--
+       expected: Login refused | actual: HTTP 200, Invalid credentials
+[PASS] SQL injection at login: admin'--
+       expected: Login refused | actual: HTTP 200, Invalid credentials
+[PASS] Control: owner opens own complaint
+       expected: 200 | actual: HTTP 200
+[PASS] Student opens another student's complaint (IDOR)
+       expected: 404 | actual: HTTP 404
+[PASS] Student opens admin page /users
+       expected: 403 | actual: HTTP 403
+[PASS] Student calls admin action: assign complaint
+       expected: 403 | actual: HTTP 403
+[PASS] Script tag in complaint subject (XSS)
+       expected: Shown as text, not run | actual: escaped as &lt;script&gt;
+[PASS] POST without CSRF token
+       expected: 400 | actual: HTTP 400
+[PASS] Upload script renamed to .pdf
+       expected: Rejected | actual: rejected with message
+[PASS] Five wrong passwords, then the right one
+       expected: Account locked | actual: correct password refused while locked
+[PASS] Open dashboard without logging in
+       expected: Redirect to /login | actual: HTTP 302 to /login
+
+MATCHING security.log LINES
+==============================================================================
+2026-11-20 05:22:09,435 LOGIN_FAIL user=- ip=127.0.0.1 attempted=' OR 1=1--
+2026-11-20 05:22:09,482 LOGIN_FAIL user=- ip=127.0.0.1 attempted=admin'--
+2026-11-20 05:22:10,437 IDOR_BLOCKED user=2 ip=127.0.0.1 complaint=1
+2026-11-20 05:22:10,454 ACCESS_DENIED user=2 ip=127.0.0.1 path=/users role=student
+2026-11-20 05:22:10,482 ACCESS_DENIED user=2 ip=127.0.0.1 path=/complaints/1/assign role=student
+2026-11-20 05:22:10,577 CSRF_FAIL user=1 ip=127.0.0.1 path=/complaints/new
+2026-11-20 05:22:10,731 UPLOAD_REJECTED user=1 ip=127.0.0.1 name=shell.pdf
+2026-11-20 05:22:11,995 LOGIN_FAIL user=- ip=127.0.0.1 attempted=locktest4750a6
+2026-11-20 05:22:12,420 LOGIN_FAIL user=- ip=127.0.0.1 attempted=locktest4750a6
+2026-11-20 05:22:12,819 LOGIN_FAIL user=- ip=127.0.0.1 attempted=locktest4750a6
+2026-11-20 05:22:13,213 LOGIN_FAIL user=- ip=127.0.0.1 attempted=locktest4750a6
+2026-11-20 05:22:13,626 LOGIN_FAIL user=- ip=127.0.0.1 attempted=locktest4750a6
+2026-11-20 05:22:13,645 LOGIN_LOCKED user=- ip=127.0.0.1 target=locktest4750a6
+
+11 of 11 tests passed.
